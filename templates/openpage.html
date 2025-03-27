@@ -1,0 +1,19 @@
+{%extends 'base.html'%}
+<style>
+  
+</style>
+{% block content%}
+
+{%block navbar%}
+{% include 'partials/nav.html'%}
+{%endblock navbar%}
+
+<div class="cardcontainer">
+{%for category in categories%}
+<a href="{% url 'eachcategory' category.category_id %}"><div class="card">
+  <img src="{{category.category_image.url}}" class="card-img-top" alt="...">
+   <p class="card-title">{{category}}</p>
+</div></a>
+{%endfor%}
+</div>
+{% endblock content %}

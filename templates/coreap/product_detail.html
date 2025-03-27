@@ -1,0 +1,27 @@
+{% extends 'base.html'%}
+{% block content %}
+          
+{%block navbar%}
+{% include 'partials/nav.html'%}
+{%endblock navbar%}
+<div class="categorycontainer">
+
+    <div class="category">
+    <div class="productimage">
+        <div class="product.productdetails">
+            <h1>{{product.product_id.name}}</h1>   
+        </div>
+        <img src="{{product.image1.url}}">
+        <img src="{{product.image2.url}}">
+        <img src="{{product.image3.url}}">
+        <h3>{{product.product_id.description}}</h3>
+        <h3>Price : {{product.product_id.price}}</h3>
+        <h3>Stock : {{product.product_id.stock}}</h3>
+        <h3>Product Type : {{product.product_id.product_type}}</h3>
+        <a href="{% url 'addtocart' product.slug%}" class="btn btn-primary">Add to Cart</a>
+    </div>
+
+</div>
+</div>
+
+{%endblock content%}

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<h2>{{request.user}}</h2>
+
+<a href="{% url 'logout' %}" class="btn btn-outline-primary">Log Out</a>
+
+{% endblock content %}

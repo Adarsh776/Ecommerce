@@ -1,0 +1,244 @@
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+a {
+    text-decoration: none !important;
+    color:black !important;
+}
+
+
+
+/* Body */
+body {
+    background: linear-gradient(45deg, rgb(181, 101, 44), blue);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+    padding-top: 100px; /* Push content down without extra margin */
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: white;
+    width: 100%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+/* Logo */
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo-container img {
+    height: 75px;
+    border-radius: 50px;
+    padding-left: 10px;
+}
+
+/* Search Bar */
+.search-container {
+    flex: 1;
+    min-width: 150px;
+    margin: 0 20px;
+}
+
+.search-container input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+/* Navbar Links */
+.nav-links {
+    display: flex;
+    gap: 1.5em;
+    align-items: center;
+    flex-wrap: wrap;
+    min-width: 0;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+/* Card Container (Fixed Spacing) */
+.cardcontainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    width: 99%;
+    border-radius: 20px;
+    background-color: white;
+}
+
+/* Card */
+.cardcontainer .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 150px;
+    max-width: 250px;
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Card Image */
+.cardcontainer .card img {
+    height: 90px;
+    width: 100px;
+}
+
+/* Card Title */
+.cardcontainer .card .card-title {
+    font-weight: bold;
+    margin-top: 10px;
+    word-wrap: break-word;
+    text-align: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .search-container {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    .nav-links {
+        justify-content: center;
+        gap: 1em;
+        margin-top: 10px;
+    }
+
+    .cardcontainer {
+        justify-content: center;
+    }
+}
+
+.categorycontainer{
+    display: flex;
+    flex-wrap: wrap;
+    /* justify-content: space-around; */
+    width: 100%;
+    gap:30px;
+}
+
+.categorycontainer .category{
+    display: flex;
+    align-items: center;
+    width:100%;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    background-color:white;
+    padding:10px;
+}
+
+.categorycontainer .productimage img{
+    height: 90px;
+    width: 100px;
+    padding-right: 5px;
+    margin-right: 10px;
+}
+
+/* Center the Form */
+.form-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background: rgb(194, 221, 255);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Form Heading */
+.form-container h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+/* Form Fields */
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* Submit Button */
+.form-container button {
+    width: 100%;
+    padding: 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.form-container button:hover {
+    background: #0056b3;
+}
+
+/* Sign In and Google Buttons */
+.form-container .btn {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    text-align: center;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.btn-outline-primary {
+    color: #007bff;
+    border: 1px solid #007bff;
+}
+
+.btn-outline-primary:hover {
+    background: #007bff;
+    color: white;
+}
+
+.btn-outline-secondary {
+    color: #333;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-outline-secondary:hover {
+    background: #f1f1f1;
+}

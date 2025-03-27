@@ -1,0 +1,26 @@
+{% extends 'base.html'%}
+
+{% block content%}
+
+{%block navbar%}
+{% include 'partials/nav.html'%}
+{%endblock navbar%}
+
+<div class="categorycontainer">
+    {%for product,variant in products%}
+    <div class="category">
+    <div class="productimage">
+    <a href="{%  url 'productdetail' variant.slug%}"> <img src="{{variant.image1.url}}" alt="{{product.name}}">
+    </div>
+    <div class="productdetails">
+        <h1>{{product.name}}</h1>
+        <p>{{product.description}}</p>
+        <p>Category: {{product.product_type}}</p></a>
+        <a href="{% url 'addtocart' variant.slug%}" class="btn btn-primary">Add to Cart</a>
+    </div>
+</div>
+    {%endfor%}
+
+</div>
+
+{%endblock content%}
