@@ -10,7 +10,7 @@ from django.core.mail import send_mail
 from django.contrib import messages
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from coreapp.models import ProductVariantModel
+from coreapp.models import ProductVariantModel,CategoriesModel
 # Create your views here.
 
 class RegisterView(View):
@@ -188,10 +188,21 @@ class ResetPasswordView(View):
         return redirect('identifyusersendotp')
 
 
+
+@method_decorator(login_required,name='dispatch')
 class DashBoardView(View):
-    @method_decorator(login_required)
     def get(self,request,*args,**kwargs):
-        messages.success(request,"User Login Succesfull")
-        return render(request,'authenticate/dashboard.html')
+        qs=ProductVariantModel.objects.all()
+        categories=CategoriesModel.objects.filter(parent_category=None)
+        context={
+            'products':qs,
+            'categories':categories
+        }
+        return render(request,'authenticate/dashboard.html',context)
+
+    
+
+
+    
     
 

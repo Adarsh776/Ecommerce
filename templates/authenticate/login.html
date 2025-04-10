@@ -4,6 +4,10 @@
 
 {% load crispy_forms_tags %}
 
+{%block navbar%}
+{% include 'partials/nav.html'%}
+{%endblock navbar%}
+
 {% block content %}
 <form action="" method="post" class="form-container">
     <h2>{{ title }}</h2>

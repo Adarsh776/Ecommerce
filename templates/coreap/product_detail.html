@@ -2,7 +2,11 @@
 {% block content %}
           
 {%block navbar%}
-{% include 'partials/nav.html'%}
+{% if request.user.is_authenticated %}
+    {% include 'partials/loginnav.html'%}
+{% else %}
+    {% include 'partials/nav.html'%}
+{% endif %}
 {%endblock navbar%}
 <div class="categorycontainer">
 

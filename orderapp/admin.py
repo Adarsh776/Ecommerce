@@ -8,7 +8,7 @@ class Orders_ModelAdmin(admin.ModelAdmin):
 
 @admin.register(OrderItemModel)
 class OrderItem_ModelAdmin(admin.ModelAdmin):
-    list_display=['quatity','price']
+    list_display=['quantity','price']
 
 @admin.register(ShippingModel)
 class Shipping_ModelAdmin(admin.ModelAdmin):

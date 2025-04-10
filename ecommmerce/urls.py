@@ -18,16 +18,17 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
-from authentication import views
-from coreapp import views
+from authentication import views as authview
+from coreapp import views as coreview
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.Openpage.as_view(),name='openpage'), 
+    path('',coreview.Openpage.as_view(),name='openpage'),
     path('authentication/',include('authentication.urls')),
     path('coreapp/',include('coreapp.urls')),
-    path('orderapp/',include('orderapp.urls'))
+    path('orderapp/',include('orderapp.urls')),
+    path('accounts/', include('allauth.urls')),
 ]
 
 if settings.DEBUG:

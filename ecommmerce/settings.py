@@ -146,7 +146,8 @@ DEFAULT_FORM_EMAIL="adarshadi7760@gmail.com"
 EMAIL_PORT=587
 EMAIL_HOST_PASSWORD='akhfvplhvljmwapp'
 
-LOGIN_URL='/login/'
+LOGIN_URL='/authentication/login/'
+
 
 AUTHENTICATION_BACKENDS = [
 
@@ -159,8 +160,8 @@ AUTHENTICATION_BACKENDS = [
 
 SITE_ID=1
 
-ACCOUNT_SIGNUP_REDIRECT_URL='/dashboard/'
-LOGIN_REDIRECT_URL='/dashboard/'
+ACCOUNT_SIGNUP_REDIRECT_URL='/authentication/dashboard/'
+LOGIN_REDIRECT_URL='/authentication/dashboard/'
 
 SOCIALACCOUNT_LOGIN_ON_GET=True
 
@@ -179,3 +180,4 @@ SOCIALACCOUNT_PROVIDERS = {
 
 MEDIA_URL='/media/'
 MEDIA_ROOT=BASE_DIR/'media'
+

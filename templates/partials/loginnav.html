@@ -3,7 +3,7 @@
 <nav class="navbar fixed-top" style="background-color: #d1e0ff;">
     <!-- Logo -->
     <div class="logo-container">
-        <a href="{%url 'openpage' %}"><img src="{%static 'img/Shopezylogo.png'%}" alt="Flipkart"></a>
+        <a href="{%url 'dashboard' %}"><img src="{%static 'img/Shopezylogo.png'%}" alt="Flipkart"></a>
     </div>
 
     <!-- Search Bar -->
@@ -13,8 +13,7 @@
 
     <!-- Right Side Icons -->
     <div class="nav-links">
-        <a href="{% url 'register' %}"><i class="fas fa-user"></i>Register</a>
-        <a href="{% url 'login' %}"><i class="fas fa-user"></i>Login</a>
+        <a href="{% url 'logout' %}"><i class="fas fa-user"></i>Logout</a>
         <a href="{% url 'cart' %}"><i class="fas fa-shopping-cart"></i>Cart</a>
         <a href="#"><i class="fas fa-store"></i>Become a seller</a>
         <a href="#"><i class="fas fa-ellipsis-v"></i></a>

@@ -1,11 +1,19 @@
-{% extends 'base.html' %}
+{%extends 'base.html'%}
 
-{% load crispy_forms_tags %}
+{% block content%}
 
-{% block content %}
+{%block navbar%}
+{% include 'partials/loginnav.html'%}
+{%endblock navbar%}
 
-<h2>{{request.user}}</h2>
+<div class="cardcontainer">
+{%for category in categories%}
+<a href="{% url 'eachcategory' category.category_id %}"><div class="card">
+  <img src="{{category.category_image.url}}" class="card-img-top" alt="...">
+   <p class="card-title">{{category}}</p>
+</div></a>
 
-<a href="{% url 'logout' %}" class="btn btn-outline-primary">Log Out</a>
-
+{%endfor%}
+</div>
 {% endblock content %}
+
