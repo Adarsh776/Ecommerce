@@ -44,5 +44,12 @@
     {% block content %}
         <!-- some content goes here -->
     {% endblock content %}
+
+    {%include 'partials/footer.html' %}
+    {% block scripts %}
+        <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'js/custom.js' %}"></script>
+    {% endblock scripts %}
 </body>
 </html>

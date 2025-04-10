@@ -15,7 +15,11 @@ from authentication.models import Custom_UserModel
 class AddToCartView(View):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        custom_user = Custom_UserModel.objects.get(id=request.user.id)
+        try:
+            custom_user = Custom_UserModel.objects.get(id=request.user.id)
+        except Custom_UserModel.DoesNotExist:
+            messages.error(request,"You are logged in, but not registered as a valid customer.")
+            return redirect('dashboard')
 
         product_slug = kwargs['slug']
         productvariant = ProductVariantModel.objects.get(slug=product_slug)
