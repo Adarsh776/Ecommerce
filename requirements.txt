@@ -1,0 +1,59 @@
+# Core Django
+Django==5.0.2
+django-crispy-forms==2.1
+crispy-bootstrap5==2023.10
+
+# Database
+psycopg2-binary==2.9.9  # For PostgreSQL support
+django-environ==0.11.2  # For environment variable management
+
+# Authentication
+django-allauth==0.58.2  # For user authentication
+django-cors-headers==4.3.1
+django-otp==1.2.2  # For two-factor authentication
+
+# Image Processing
+Pillow==10.2.0  # Required for ImageField
+django-imagekit==4.1.0  # For image processing
+
+# Payment Processing
+stripe==7.11.0  # For Stripe integration
+django-payments==2.0.0  # For payment processing
+
+# Search Functionality
+django-haystack==3.2.1  # For advanced search
+Whoosh==2.7.4  # Search backend
+
+# Frontend
+django-compressor==4.4  # For CSS/JS compression
+django-static-precompiler==1.9.1  # For static file compilation
+
+# Development Tools
+django-debug-toolbar==4.2.0  # For debugging
+django-extensions==3.2.3  # For development utilities
+ipython==8.20.0  # Enhanced Python shell
+
+# Testing
+pytest==7.4.3
+pytest-django==4.7.0
+coverage==7.3.2
+
+# Documentation
+Sphinx==7.2.6  # For documentation
+sphinx-rtd-theme==2.0.0  # Documentation theme
+
+# Deployment
+gunicorn==21.2.0  # Production server
+whitenoise==6.6.0  # For serving static files
+django-storages==1.14.2  # For cloud storage
+
+# Email
+django-anymail==10.1  # For email service integration
+
+# Monitoring
+sentry-sdk==1.39.1  # For error tracking
+
+# Utilities
+python-dateutil==2.8.2
+requests==2.31.0
+python-dotenv==1.0.0  # For environment variables 
