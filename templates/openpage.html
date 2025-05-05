@@ -1,5 +1,5 @@
 {%extends 'base.html'%}
-
+{%load static%}
 {% block content%}
 
 {%block navbar%}
@@ -14,4 +14,17 @@
 </div></a>
 {%endfor%}
 </div>
+
+<div class="banner-carousel">
+  <div class="slides">
+    <img src="{%static 'img/shopanytime.webp'%}" alt="Ad 1" />
+    <img src="{%static 'img/furniturebanner.webp'%}" alt="Ad 2" />
+    <img src="{%static 'img/blackfriday.webp'%}" alt="Ad 2" />
+    <img src="{%static 'img/newarrival.png'%}" alt="Ad 3" />
+    <img src="{%static 'img/Sneakerbanner.webp'%}" alt="Ad 4" />
+    <!-- Repeat or add more -->
+  </div>
+</div>
+
+
 {% endblock content %}
