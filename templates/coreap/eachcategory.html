@@ -10,21 +10,74 @@
 {% endif %}
 {%endblock navbar%}
 
-<div class="categorycontainer">
-    {%for product,variant in products%}
-    <div class="category">
-    <div class="productimage">
-    <a href="{%  url 'productdetail' variant.slug%}"> <img src="{{variant.image1.url}}" alt="{{product.name}}">
-    </div>
-    <div class="productdetails">
-        <h1>{{product.name}}</h1>
-        <p>{{product.description}}</p>
-        <p>Category: {{product.product_type}}</p></a>
-        <a href="{% url 'addtocart' variant.slug %}" class="btn btn-primary">Add to Cart</a>
-    </div>
-</div>
-    {%endfor%}
-
-</div>
+<ul class="category-menu">
+    {% for category in categories %}
+      <li class="category-item">
+        <span class="category-name">
+          {{ category.name }}
+          {% if category.subcategories.all %}
+            <span class="caret">&#9660;</span>  <!-- Down arrow ▾ -->
+          {% endif %}
+        </span>
+  
+        {% if category.subcategories.all %}
+          <ul class="subcategory-menu">
+            {% for sub in category.subcategories.all %}
+              <li class="subcategory-item">
+                <span class="subcategory-name">
+                  {{ sub.name }}
+                  {% if sub.subcategories.all or sub.products.all %}
+                    <span class="caret">&#9654;</span> <!-- Right arrow ▸ -->
+                  {% endif %}
+                </span>
+  
+                <!-- Sub-subcategories or products -->
+                {% if sub.subcategories.all %}
+                  <ul class="sub-subcategory-menu">
+                    {% for subsub in sub.subcategories.all %}
+                      <li><a href="#">{{ subsub.name }}</a></li>
+                    {% endfor %}
+                  </ul>
+                {% elif sub.products.all %}
+                  <ul class="sub-subcategory-menu">
+                    {% for product in sub.products.all %}
+                      <li><a href="#">{{ product.name }}</a></li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+  
+  <div class="category-section">
+    {% for subcat_name, items in categorized_products.items %}
+      <div class="subcategory-container">
+        <div class="subcategory-header">
+          <h2>{{ subcat_name }}</h2>
+          <a href="#" class="view-all-btn">VIEW ALL</a>
+        </div>
+  
+        <div class="product-card-row">
+          {% for product, variant in items %}
+            <div class="product-card">
+              <a href="{% url 'productdetail' slug=variant.slug %}">
+                <img src="{{ variant.image1.url }}" alt="{{ product.name }}">
+              </a>
+              <div class="product-info">
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.description|truncatewords:10 }}</p>
+                <a href="{% url 'addtocart' variant.slug %}" class="btn btn-primary">Add to Cart</a>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  
 
 {%endblock content%}

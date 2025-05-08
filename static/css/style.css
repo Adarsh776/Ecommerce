@@ -182,29 +182,116 @@ body {
     }
 }
 
-.categorycontainer{
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    gap:30px;
+/* Entire Category Section */
+.category-section {
+  padding: 40px 20px;
+  background-color: #f9f9f9;
 }
 
-.categorycontainer .category{
-    display: flex;
-    align-items: center;
-    width:100%;
-    border-radius: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    background-color:white;
-    padding:10px;
+/* Each Subcategory Block */
+.subcategory-container {
+  background-color: white;
+  padding:30px;
+  margin-bottom: 50px;
 }
 
-.categorycontainer .productimage img{
-    height: 90px;
-    width: 100px;
-    padding-right: 5px;
-    margin-right: 10px;
+/* Subcategory Header */
+.subcategory-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-left: 5px solid #007bff;
+  padding-left: 12px;
+  margin-bottom: 20px;
 }
+
+.subcategory-header h2 {
+  font-size: 1.6rem;
+  color: #333;
+  margin: 0;
+}
+
+.view-all-btn {
+  font-size: 0.9rem;
+  color: white;
+  background-color: #007bff;
+  padding: 6px 12px;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.view-all-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Product Grid */
+.product-card-row {
+  background-color: white;
+  display: flex;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+/* Individual Product Card */
+.product-card {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+.product-card img {
+  width:100%;
+  height: 200px;
+  object-fit: contain;
+}
+
+/* Product Details */
+.product-info {
+  padding: 12px;
+  text-align: left;
+}
+
+.product-info h3 {
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+  color: #222;
+}
+
+.product-info p {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 4px 0;
+}
+
+.product-info .category {
+  font-size: 0.85rem;
+  color: #999;
+}
+
+/* Add to Cart Button */
+.product-info .btn-primary {
+  margin-top: 10px;
+  display: inline-block;
+  background-color: #28a745;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.product-info .btn-primary:hover {
+  background-color: #218838;
+}
+
 
 /* Center the Form */
 .form-container {
@@ -336,6 +423,181 @@ footer {
     80%   { transform: translateX(-400%); }
     96%   { transform: translateX(-400%); }
     100%  { transform: translateX(-400%); }
+  }
+
+.Trending-Deals{
+    display: flex;
+    flex-direction: column;
+    width: 99%;
+    margin: 10px;
+    background-color: white;
+    
+}
+.product-section {
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 20px;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+
+}
+
+.product-section a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.product-section .card {
+  flex: 0 0 auto;
+  width: 180px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+  padding: 10px;
+  text-align: center;
+}
+
+.product-section .card:hover {
+  transform: translateY(-5px);
+}
+
+.product-section .card img {
+  width: 100%;
+  height: 160px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.product-section .card h3 {
+  font-size: 16px;
+  margin: 5px 0;
+  color: #333;
+}
+
+.product-section .card b {
+  font-size: 15px;
+  color: #e53935;
+}
+.section-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+    padding: 20px 0 0 20px;
+  }
+
+  /* Below navbar dropdown section */
+
+  .category-menu {
+    list-style: none;
+    background-color: #ffffff;
+    width:100%;
+    padding: 0;
+    margin: 10px;
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+  }
+  
+  .category-item {
+    position: relative;
+  }
+  
+  .category-name {
+    font-weight: bold;
+    padding: 10px;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .caret {
+    margin-left: 6px;
+    display: inline-block;
+    transition: transform 0.3s ease;
+  }
+  
+  /* Rotate caret down on hover for subcategories */
+  .category-item:hover > .category-name .caret {
+    transform: rotate(180deg); /* ▾ becomes ▴ visually */
+  }
+  
+  .subcategory-menu {
+    display: none;
+    position: absolute;
+    top: 40px;
+    left: 0;
+    background-color: white;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    min-width: 180px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+  }
+  
+  .subcategory-menu li a,
+  .subcategory-name {
+    display: block;
+    padding: 10px;
+    color: black;
+    text-decoration: none;
+    background-color: #fff;
+  }
+  
+  .subcategory-menu li a:hover,
+  .subcategory-name:hover {
+    background-color: #eee;
+  }
+  
+  /* Show subcategory on hover */
+  .category-item:hover .subcategory-menu {
+    display: block;
+  }
+  
+  .subcategory-item {
+    position: relative;
+  }
+  
+  /* Sub-subcategory menu */
+  .sub-subcategory-menu {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    min-width: 160px;
+    z-index: 10;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .sub-subcategory-menu li a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+  }
+  
+  .sub-subcategory-menu li a:hover {
+    background-color: #eee;
+  }
+  
+  /* Show sub-subcategory on hover */
+  .subcategory-item:hover .sub-subcategory-menu {
+    display: block;
+  }
+  
+  /* Optional: rotate caret for sub-subcategories too */
+  .subcategory-item:hover .subcategory-name .caret {
+    transform: rotate(90deg); /* ▸ becomes ▾ visually */
   }
   
   

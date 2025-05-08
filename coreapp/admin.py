@@ -7,7 +7,7 @@ class Categories_ModelAdmin(admin.ModelAdmin):
 
 @admin.register(ProductModel)
 class Product_ModelAdmin(admin.ModelAdmin):
-    list_diplay=['name','description','product_type','created_at']
+    list_diplay=['category_id','name','description','product_type','created_at']
 
 @admin.register(ProductVariantModel)
 class ProductVariant_ModelAdmin(admin.ModelAdmin):

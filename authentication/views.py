@@ -10,7 +10,7 @@ from django.core.mail import send_mail
 from django.contrib import messages
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from coreapp.models import ProductVariantModel,CategoriesModel
+from coreapp.models import ProductModel,CategoriesModel
 # Create your views here.
 
 class RegisterView(View):
@@ -191,14 +191,22 @@ class ResetPasswordView(View):
 
 @method_decorator(login_required,name='dispatch')
 class DashBoardView(View):
-    def get(self,request,*args,**kwargs):
-        qs=ProductVariantModel.objects.all()
-        categories=CategoriesModel.objects.filter(parent_category=None)
-        context={
-            'products':qs,
-            'categories':categories
+    def get(self, request, *args, **kwargs):
+        products = ProductModel.objects.all()
+        categories = CategoriesModel.objects.filter(parent_category=None)
+        
+        # Pair each product with its first variant (if any)
+        product_variant_pairs = []
+        for product in products:
+            variant = product.variants.first()
+            if variant:
+                product_variant_pairs.append((product, variant))
+
+        context = {
+            'product_variants': product_variant_pairs,
+            'categories': categories
         }
-        return render(request,'authenticate/dashboard.html',context)
+        return render(request, 'openpage.html', context)
 
     
 

@@ -3,7 +3,11 @@
 {% block content%}
 
 {%block navbar%}
-{% include 'partials/nav.html'%}
+{% if request.user.is_authenticated %}
+    {% include 'partials/loginnav.html'%}
+{% else %}
+    {% include 'partials/nav.html'%}
+{% endif %}
 {%endblock navbar%}
 
 <div class="cardcontainer">
@@ -25,6 +29,23 @@
     <!-- Repeat or add more -->
   </div>
 </div>
-
+<div class="Trending-Deals"> 
+<h2 class="section-title">Trending Deals</h2>
+<div class="product-section">
+ 
+  {% for product, variant in product_variants %}
+  <a href="{% url 'productdetail' slug=variant.slug %}">
+    <div class="card">
+    {% if variant.image1 %}
+      <img src="{{ variant.image1.url }}" alt="{{ product.name }}">
+      <h3>{{ product.name }}</h3>
+      <b>from ₹{{variant.sale_price}}</b>
+    {% endif %}
+    
+  </div>
+</a>
+  {% endfor %}
+</div>
+</div>
 
 {% endblock content %}
