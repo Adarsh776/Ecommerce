@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import ProductModel
-from .models import ProductVariantModel,CategoriesModel
+from .models import ProductVariantModel,CategoriesModel,ProductAttributeModel
 from django.views import View
 from collections import defaultdict
 
@@ -8,19 +8,24 @@ from collections import defaultdict
 
 class Openpage(View):
     def get(self, request, *args, **kwargs):
-        products = ProductModel.objects.all()
-        categories = CategoriesModel.objects.filter(parent_category=None)
         
-        # Pair each product with its first variant (if any)
-        product_variant_pairs = []
-        for product in products:
-            variant = product.variants.first()
-            if variant:
-                product_variant_pairs.append((product, variant))
+        trending_products=ProductModel.objects.filter(trending_product=True).prefetch_related('variants')
+        
+        electronics = CategoriesModel.objects.get(name="Electronics")
+        subcategories = CategoriesModel.objects.filter(parent_category=electronics)
+
+        categories=CategoriesModel.objects.filter(parent_category=None)
+
+        best_electronics = ProductModel.objects.filter(
+            category_id__in=subcategories,
+            best_product=True
+        ).prefetch_related('variants') 
+
 
         context = {
-            'product_variants': product_variant_pairs,
-            'categories': categories
+            'categories': categories,
+            'best_electronics':best_electronics,
+            'trending_products':trending_products
         }
         return render(request, 'openpage.html', context)
 
@@ -39,10 +44,10 @@ class EachCategory(View):
             for product in products:
                 variant=product.variants.first()
                 if variant:
-                    if subcat.name not in categorized_products:
-                        categorized_products[subcat.name]=[(product,variant)]
+                    if subcat not in categorized_products:
+                        categorized_products[subcat]=[(product,variant)]
                     else:
-                        categorized_products[subcat.name]=categorized_products[subcat.name]+[(product,variant)]
+                        categorized_products[subcat]=categorized_products[subcat]+[(product,variant)]
 
         # Fetch all main categories with preloaded subcategories
         categories = CategoriesModel.objects.filter(parent_category__isnull=True).prefetch_related("subcategories", "subcategories__subcategories", "subcategories__products")
@@ -55,12 +60,67 @@ class EachCategory(View):
 
     
 class ProductDetailView(View):
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
         slug = kwargs['slug']
-        product = ProductVariantModel.objects.get(slug=slug)
-        context={
-            'product':product
+        product = ProductVariantModel.objects.select_related('product_id__category_id').filter(slug=slug).first()
+
+        category = product.product_id.category_id
+        product_id = product.product_id.product_id
+
+        similar_products = ProductVariantModel.objects.filter(
+            product_id__category_id=category
+        ).exclude(product_id=product_id)[:8]
+
+        best_deals = ProductVariantModel.objects.filter(
+            product_id__category_id=category,
+            product_id__best_product=True
+        ).exclude(product_id=product_id)[:8]
+
+        # ---- RECENTLY VIEWED HANDLING ----
+        recently_viewed = request.session.get('recently_viewed', [])
+
+        if slug in recently_viewed:
+            recently_viewed.remove(slug)  # move it to the front
+        recently_viewed.insert(0, slug)  # add current product to front
+
+        if len(recently_viewed) > 8:
+            recently_viewed = recently_viewed[:8]
+
+        request.session['recently_viewed'] = recently_viewed
+        request.session.modified = True  # save session
+
+        # ---- FETCH RECENT PRODUCTS ----
+        recent_products = ProductVariantModel.objects.filter(slug__in=recently_viewed).exclude(slug=slug)
+        recent_products = sorted(recent_products, key=lambda x: recently_viewed.index(x.slug))
+
+        attributes=ProductAttributeModel.objects.filter(product_id=product_id)
+        attributedict={}
+        for p in attributes:
+            if p.attribute not in attributedict:
+                attributedict[p.attribute]=[p.value]
+            else:
+                attributedict[p.attribute]=attributedict[p.attribute]+[p.value]
+        
+
+        context = {
+            'product': product,
+            'similar_products': similar_products,
+            'best_deals': best_deals,
+            'recently_viewed': recent_products,
+            "attributedict":attributedict
         }
-        return render(request,'coreap/product_detail.html',context)
+        return render(request, 'coreap/product_detail.html', context)
 
+class SubCategoryProducts(View):
+    def get(self, request, *args, **kwargs):
+        subcategory_id = kwargs['id']  # e.g., TV’s ID
+        subcategory = CategoriesModel.objects.get(category_id=subcategory_id)
 
+        # Get products directly under this subcategory
+        products = ProductModel.objects.filter(category_id=subcategory).prefetch_related('variants')
+
+        context = {
+            'subcategory': subcategory,
+            'products': products,
+        }
+        return render(request, 'coreap/subcategory_products.html', context)

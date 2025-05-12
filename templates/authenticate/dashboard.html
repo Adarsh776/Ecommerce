@@ -16,7 +16,6 @@
   <img src="{{category.category_image.url}}" class="card-img-top" alt="...">
    <p class="card-title">{{category}}</p>
 </div></a>
-
 {%endfor%}
 </div>
 
@@ -34,14 +33,13 @@
 <div class="Trending-Deals"> 
   <h2 class="section-title">Trending Deals</h2>
   <div class="product-section">
-   
-    {% for product, variant in product_variants %}
-    <a href="{% url 'productdetail' slug=variant.slug %}">
+    {% for product in trending_products %}
+    <a href="{% url 'productdetail' slug=product.variants.first.slug %}">
       <div class="card">
-      {% if variant.image1 %}
-        <img src="{{ variant.image1.url }}" alt="{{ product.name }}">
+      {% if product.variants.first.image1 %}
+        <img src="{{ product.variants.first.image1.url }}" alt="{{ product.name }}">
         <h3>{{ product.name }}</h3>
-        <b>from ₹{{variant.sale_price}}</b>
+        <b>from ₹{{product.variants.first.sale_price}}</b>
       {% endif %}
       
     </div>
@@ -49,5 +47,23 @@
     {% endfor %}
   </div>
   </div>
+
+  <div class="Trending-Deals"> 
+    <h2 class="section-title">Best Electronics</h2>
+    <div class="product-section">
+      {% for product in best_electronics %}
+      <a href="{% url 'productdetail' slug=product.variants.first.slug %}">
+        <div class="card">
+        {% if product.variants.first.image1 %}
+          <img src="{{ product.variants.first.image1.url }}" alt="{{ product.name }}">
+          <h3>{{ product.name | truncatechars:"50"}}</h3>
+          <b>from ₹{{product.variants.first.sale_price}}</b>
+        {% endif %}
+        
+      </div>
+    </a>
+      {% endfor %}
+    </div>
+    </div>
 {% endblock content %}
 

@@ -122,4 +122,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-Adarsh S - [@yourtwitter](https://twitter.com/yourtwitter)
+Adarsh S - 
+[Gmail](adarshadi7760@gmail.com)
+[LinkedIn](https://www.linkedin.com/in/adarsh-s-4ba7a7268/)

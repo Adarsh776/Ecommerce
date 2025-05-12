@@ -192,21 +192,26 @@ class ResetPasswordView(View):
 @method_decorator(login_required,name='dispatch')
 class DashBoardView(View):
     def get(self, request, *args, **kwargs):
-        products = ProductModel.objects.all()
-        categories = CategoriesModel.objects.filter(parent_category=None)
         
-        # Pair each product with its first variant (if any)
-        product_variant_pairs = []
-        for product in products:
-            variant = product.variants.first()
-            if variant:
-                product_variant_pairs.append((product, variant))
+        trending_products=ProductModel.objects.filter(trending_product=True).prefetch_related('variants')
+
+        electronics = CategoriesModel.objects.get(name="Electronics")
+        subcategories = CategoriesModel.objects.filter(parent_category=electronics)
+
+        categories=CategoriesModel.objects.filter(parent_category=None)
+
+        best_electronics = ProductModel.objects.filter(
+            category_id__in=subcategories,
+            best_product=True
+        ).prefetch_related('variants') 
+
 
         context = {
-            'product_variants': product_variant_pairs,
-            'categories': categories
+            'categories': categories,
+            'best_electronics':best_electronics,
+            'trending_products':trending_products
         }
-        return render(request, 'openpage.html', context)
+        return render(request, 'authenticate/dashboard.html', context)
 
     
 

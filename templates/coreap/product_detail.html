@@ -1,31 +1,120 @@
-{% extends 'base.html'%}
+{% extends 'base.html' %}
 {% block content %}
-          
-{%block navbar%}
-{% if request.user.is_authenticated %}
-    {% include 'partials/loginnav.html'%}
-{% else %}
-    {% include 'partials/nav.html'%}
-{% endif %}
-{%endblock navbar%}
-<div class="categorycontainer">
 
-    <div class="category">
-    <div class="productimage">
-        <div class="product.productdetails">
-            <h1>{{product.product_id.name}}</h1>   
-        </div>
-        <img src="{{product.image1.url}}">
-        <img src="{{product.image2.url}}">
-        <img src="{{product.image3.url}}">
-        <h3>{{product.product_id.description}}</h3>
-        <h3>Price : {{product.product_id.price}}</h3>
-        <h3>Stock : {{product.product_id.stock}}</h3>
-        <h3>Product Type : {{product.product_id.product_type}}</h3>
-        <a href="{% url 'addtocart' product.slug%}" class="btn btn-primary">Add to Cart</a>
+{% block navbar %}
+  {% if request.user.is_authenticated %}
+    {% include 'partials/loginnav.html' %}
+  {% else %}
+    {% include 'partials/nav.html' %}
+  {% endif %}
+{% endblock navbar %}
+
+<div class="product-page-container">
+  <!-- Left: Images -->
+  <div class="product-left">
+    <div class="main-image">
+      <img src="{{ product.image1.url }}" alt="Main Image">
+    </div>
+    <div class="thumbnail-row">
+      <img src="{{ product.image1.url }}" alt="Thumb 1">
+      <img src="{{ product.image2.url }}" alt="Thumb 2">
+      <img src="{{ product.image3.url }}" alt="Thumb 3">
+    </div>
+    <div class="action-buttons">
+      <a href="{% url 'addtocart' product.slug %}" class="btn add-cart">Add to Cart</a>
+      <a href="#" class="btn buy-now">Buy Now</a>
+    </div>
+  </div>
+
+  <!-- Right: Details -->
+  <div class="product-right">
+    <h1 class="product-title">{{ product.product_id.name }}</h1>
+    <p class="product-description">{{ product.product_id.description }}</p>
+
+    <div class="price-block">
+      <h2>₹{{ product.sale_price }}</h2>
+      <strike>₹{{ product.original_price }}</strike>
+      <span class="discount">{{ product.discount_per }}% OFF</span>
     </div>
 
+    <p class="stock">In Stock: {{ product.stock }}</p>
+    <p class="type">Product Type: {{ product.product_id.product_type }}</p>
+
+        <!-- SELECT COLOR -->
+    <div class="product-options">
+      <h3>Select Color</h3>
+      <div class="option-group">
+        {% for a, v in attributedict.items %}
+          {% if a == "Color" %}
+            {% for color in v %}
+              <div class="color-swatch" style="background-color: {{ color|lower }};" title="{{ color }}"></div>
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- SELECT SIZE -->
+    <div class="product-options">
+      {% if "Size" in attributedict%}
+      <h3>Select Size</h3>
+      {%endif%}
+      <div class="option-group">
+        {% for a, v in attributedict.items %}
+          {% if a|lower == "size" or a|lower == "storage" %}
+            {% for size in v %}
+              <div class="size-box">{{ size }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="product-detail">
+      <h2>Product Details</h2>
+      <h4>Name : <small>{{product.product_id}}</small></h1>
+      {% for a,v in attributedict.items%}
+        <h4>{{a}} : <small>{% for i in v %} {{i}}  {%endfor%}</small></h4>
+      {%endfor%}
+    </div>
+  </div>
+</div>
+
+<!-- SIMILAR PRODUCTS -->
+ <div>
+<h2 class="similar-section-title">Similar Products</h2>
+<div class="product-details-section">
+  {% for item in similar_products %}
+    <a href="{% url 'productdetail' slug=item.slug %}" class="product-details-card">
+      <img src="{{ item.image1.url }}" alt="{{ item.product_id.name }}">
+      <h4>{{ item.product_id.name }}</h4>
+    </a>
+  {% endfor %}
 </div>
 </div>
 
-{%endblock content%}
+<!-- BEST DEALS -->
+ <div>
+<h2 class="similar-section-title">Best Deals</h2>
+<div class="product-details-section">
+  {% for item in best_deals %}
+    <a href="{% url 'productdetail' slug=item.slug %}" class="product-details-card">
+      <img src="{{ item.image1.url }}" alt="{{ item.product_id.name }}">
+      <h4>{{ item.product_id.name }}</h4>
+    </a>
+  {% endfor %}
+</div>
+</div>
+
+<div>
+<h2 class="similar-section-title">Recently Viewed</h2>
+<div class="product-details-section">
+  {% for item in recently_viewed %}
+    <a href="{% url 'productdetail' slug=item.slug %}" class="product-details-card">
+        <img src="{{ item.image1.url }}" alt="{{ item.product_id.name }}">
+        <h4>{{ item.product_id.name }}</h4>
+    </a>
+  {% endfor %}
+</div>
+</div>
+{% endblock content %}

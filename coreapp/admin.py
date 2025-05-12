@@ -15,7 +15,7 @@ class ProductVariant_ModelAdmin(admin.ModelAdmin):
 
 @admin.register(ProductAttributeModel)
 class ProductAttribute_ModelAdmin(admin.ModelAdmin):
-    list_display=["attribute","value"]
+    list_display=["product_id","attribute","value"]
 
 @admin.register(PaymentsModel)
 class Payments_ModelAdmin(admin.ModelAdmin):

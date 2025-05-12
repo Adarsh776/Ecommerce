@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content%}
+{% block navbar %}
+  {% if request.user.is_authenticated %}
+    {% include 'partials/loginnav.html' %}
+  {% else %}
+    {% include 'partials/nav.html' %}
+  {% endif %}
+{% endblock navbar %}
+
+<div class="product-grid">
+    {% for product in products %}
+    <a href="{% url 'productdetail' slug=product.variants.first.slug%}">
+      <div class="products-card">
+        <h3>{{ product.name }}</h3>
+        <p>{{ product.description|truncatewords:15 }}</p>
+        {% if product.variants.first %}
+          <img src="{{ product.variants.first.image1.url }}" alt="{{ product.name }}">
+          <p>Price: ₹{{ product.variants.first.sale_price }}</p>
+        {% endif %}
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  
+  
+{% endblock content %}

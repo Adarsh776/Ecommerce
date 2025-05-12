@@ -61,6 +61,9 @@ class ProductAttributeModel(models.Model):
     product_id=models.ForeignKey(ProductModel,on_delete=models.CASCADE)
     attribute=models.CharField(max_length=100)
     value=models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.product_id.name
     
 
 

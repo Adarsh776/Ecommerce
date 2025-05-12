@@ -16,7 +16,7 @@
         <span class="category-name">
           {{ category.name }}
           {% if category.subcategories.all %}
-            <span class="caret">&#9660;</span>  <!-- Down arrow ▾ -->
+            <span class="caret">></span>  <!-- Down arrow ▾ -->
           {% endif %}
         </span>
   
@@ -27,7 +27,7 @@
                 <span class="subcategory-name">
                   {{ sub.name }}
                   {% if sub.subcategories.all or sub.products.all %}
-                    <span class="caret">&#9654;</span> <!-- Right arrow ▸ -->
+                    <span style="color:rgba(110, 110, 110, 0.877)">></span> <!-- Right arrow ▸ -->
                   {% endif %}
                 </span>
   
@@ -41,7 +41,7 @@
                 {% elif sub.products.all %}
                   <ul class="sub-subcategory-menu">
                     {% for product in sub.products.all %}
-                      <li><a href="#">{{ product.name }}</a></li>
+                      <li><a href="{% url 'productdetail' slug=product.variants.first.slug %}">{{ product.name }}</a></li>
                     {% endfor %}
                   </ul>
                 {% endif %}
@@ -54,11 +54,11 @@
   </ul>
   
   <div class="category-section">
-    {% for subcat_name, items in categorized_products.items %}
+    {% for subcat, items in categorized_products.items %}
       <div class="subcategory-container">
         <div class="subcategory-header">
-          <h2>{{ subcat_name }}</h2>
-          <a href="#" class="view-all-btn">VIEW ALL</a>
+          <h2>{{ subcat.name }}</h2>
+          <a href="{%url 'subcategoryproducts' subcat.category_id %}" class="view-all-btn">VIEW ALL</a>
         </div>
   
         <div class="product-card-row">
