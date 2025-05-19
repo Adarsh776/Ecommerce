@@ -52,15 +52,15 @@
     <h2 class="section-title">Best Electronics</h2>
     <div class="product-section">
       {% for product in best_electronics %}
-      <a href="{% url 'productdetail' slug=product.variants.first.slug %}" target="_blank">  lplplplplpl</a>
+      <a href="{% url 'productdetail' slug=product.variants.first.slug %}" target="_blank">
         <div class="card">
         {% if product.variants.first.image1 %}
           <img src="{{ product.variants.first.image1.url }}" alt="{{ product.name }}">
           <h3>{{ product.name | truncatechars:"20"}}</h3>
           <b>from ₹{{product.variants.first.sale_price}}</b>
         {% endif %}
-        
       </div>
+    </a>
    
       {% endfor %}
     </div>
