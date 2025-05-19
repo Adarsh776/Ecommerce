@@ -518,12 +518,12 @@ footer {
     margin-left: 6px;
     display: inline-block;
     transition: transform 0.3s ease;
-    transform: rotate(-90deg);
+    transform: rotate(90deg);
   }
   
   /* Rotate caret down on hover for subcategories */
   .category-item:hover > .category-name .caret {
-    transform: rotate(90deg); /* ▾ becomes ▴ visually */
+    transform: rotate(-90deg); /* ▾ becomes ▴ visually */
   }
   
   .subcategory-menu {
@@ -652,16 +652,7 @@ footer {
     display: inline-block;
     text-align: center;
   }
-  
-a.add-cart {
-    background-color: #ff4081;
-    color: white;
-  }
-  
-  a.buy-now {
-    background-color: #00b894;
-    color: white;
-  }
+
   
   .product-right {
     flex: 1;
@@ -702,9 +693,10 @@ a.add-cart {
     font-size: 18px;
   }
   
-  .stock, .type {
+  .stock {
+    font-weight:600;
     font-size: 16px;
-    color: #444;
+    color: #d81e56;
   }
   
   /* Related Sections */
@@ -819,6 +811,7 @@ a.add-cart {
     border-color: #007bff;
   }
   
+  
   /* Size Boxes */
   .size-box {
     padding: 8px 16px;
@@ -834,6 +827,13 @@ a.add-cart {
     background-color: #eaeaea;
     border-color: #007bff;
   }
+
+  .size-box.selected {
+    background-color: #007bff;
+    color: white;
+    border-color: #0056b3;
+  }
+  
   
   .product-grid {
     display: grid !important;
@@ -874,4 +874,55 @@ a.add-cart {
     color: #555;
     margin: 5px 0;
   }
+
+  .variant-thumbnails {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+  }
   
+  .variant-thumb-link {
+    display: block;
+    overflow: hidden;
+  }
+  
+  .variant-thumb-link:hover {
+    border: 1px solid #555;
+    border-radius: 6px;
+    transform: scale(1.1);
+    transition: transform 1s ease-in-out border 1s ease-in-out;
+  }
+  
+.qty-option-group {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width:90px;
+  gap: 12px;
+  border:1px solid #ddd;
+  border-radius: 5px;
+}
+
+button.add-cart {
+  background-color: #ff2b92;
+  color: white;
+}
+button.add-cart:hover{
+  background-color: #ff236c;
+  box-shadow: 4px 0 4px 0 rgba(101, 101, 101, 0.619);
+  transform: scale(1.05);
+  transition: boxshadow 2s transform 2s;
+  color: white;
+}
+a.buy-now {
+  background-color: #00b894;
+  color: white;
+}
+a.buy-now:hover {
+  background-color: #00846a;
+  box-shadow: 4px 0 4px 0 rgba(101, 101, 101, 0.619);
+  transform: scale(1.05);
+  transition: boxshadow 2s transform 2s;
+  color: white;
+}

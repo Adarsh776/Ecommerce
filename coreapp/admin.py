@@ -11,11 +11,11 @@ class Product_ModelAdmin(admin.ModelAdmin):
 
 @admin.register(ProductVariantModel)
 class ProductVariant_ModelAdmin(admin.ModelAdmin):
-    list_display=["attribute","value","extra_price","image1","image2","image3","stock","original_price","sale_price","discount_per","color","slug"]
+    list_display=["product_id","attribute","value","color","image1","image2","image3","stock","extra_price","original_price","sale_price","discount_per","slug"]
 
 @admin.register(ProductAttributeModel)
 class ProductAttribute_ModelAdmin(admin.ModelAdmin):
-    list_display=["product_id","attribute","value"]
+    list_display=["variant_id","attribute","value"]
 
 @admin.register(PaymentsModel)
 class Payments_ModelAdmin(admin.ModelAdmin):
@@ -29,6 +29,3 @@ class Reviews_ModelAdmin(admin.ModelAdmin):
 class DigitalProduct_ModelAdmin(admin.ModelAdmin):
     list_display=["file_url"]
 
-@admin.register(CartModel)
-class Cart_ModelAdmin(admin.ModelAdmin):
-    list_display=["quantity"]

@@ -45,7 +45,9 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'coreapp',
-    'orderapp'
+    'orderapp',
+    'cartapp',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
@@ -181,3 +183,5 @@ SOCIALACCOUNT_PROVIDERS = {
 MEDIA_URL='/media/'
 MEDIA_ROOT=BASE_DIR/'media'
 
+RAZORPAY_KEY_ID='rzp_test_U2G8Ippalow6BS'
+RAZORPAY_KEY_SECRET='oNJJtjQuFPN9mB2undfwTOgn'

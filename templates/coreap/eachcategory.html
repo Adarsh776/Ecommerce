@@ -62,15 +62,15 @@
         </div>
   
         <div class="product-card-row">
-          {% for product, variant in items %}
+          {% for product, variant in items|slice:":4" %}
             <div class="product-card">
-              <a href="{% url 'productdetail' slug=variant.slug %}">
+              <a href="{% url 'productdetail' slug=variant.slug %}" target="_blank">
                 <img src="{{ variant.image1.url }}" alt="{{ product.name }}">
               </a>
               <div class="product-info">
                 <h3>{{ product.name }}</h3>
                 <p>{{ product.description|truncatewords:10 }}</p>
-                <a href="{% url 'addtocart' variant.slug %}" class="btn btn-primary">Add to Cart</a>
+                
               </div>
             </div>
           {% endfor %}

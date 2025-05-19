@@ -1,0 +1,57 @@
+<!-- cartapp/templates/cartapp/razorpay_payment.html -->
+{% extends 'base.html' %}
+{% block content %}
+<div class="container text-center mt-5">
+  <h2>Processing Payment...</h2>
+  <p>Please wait, do not refresh or close this page.</p>
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  const razorpayKeyId = "{{ razorpay_key_id }}";
+  const razorpayOrderId = "{{ order.id }}";
+  const amount = "{{ order.amount }}";  // in paise
+  const shippingData = {{ shipping|safe }};  // contains address, name, etc.
+
+  const options = {
+    key: razorpayKeyId,
+    amount: amount,
+    currency: "INR",
+    name: "SHOPEZY",
+    description: "Secure Payment",
+    order_id: razorpayOrderId,
+    handler: function (response) {
+      const data = new FormData();
+      data.append("razorpay_payment_id", response.razorpay_payment_id);
+      data.append("razorpay_order_id", response.razorpay_order_id);
+      data.append("razorpay_signature", response.razorpay_signature);
+      fetch("{% url 'razorpay_callback' %}", {
+        method: "POST",
+        headers: {
+          'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: data
+      })
+      .then(response => response.json())
+      .then(result => {
+        if (result.status === "success") {
+          alert("Payment successful! Order placed.");
+          window.location.href = "{% url 'dashboard' %}";
+        } else {
+          alert("Payment verification failed. Please contact support.");
+        }
+      });
+},
+    prefill: {
+      name: shippingData.name,
+      email: "{{ request.user.email }}"
+    },
+    theme: {
+      color: "#3399cc"
+    }
+  };
+
+  const rzp = new Razorpay(options);
+  rzp.open();
+</script>
+{% endblock %}

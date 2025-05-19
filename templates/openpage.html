@@ -34,7 +34,7 @@
   <h2 class="section-title">Trending Deals</h2>
   <div class="product-section">
     {% for product in trending_products %}
-    <a href="{% url 'productdetail' slug=product.variants.first.slug %}">
+    <a href="{% url 'productdetail' slug=product.variants.first.slug %}" target="_blank">
       <div class="card">
       {% if product.variants.first.image1 %}
         <img src="{{ product.variants.first.image1.url }}" alt="{{ product.name }}">
@@ -52,7 +52,7 @@
     <h2 class="section-title">Best Electronics</h2>
     <div class="product-section">
       {% for product in best_electronics %}
-      <a href="{% url 'productdetail' slug=product.variants.first.slug %}">
+      <a href="{% url 'productdetail' slug=product.variants.first.slug %}" target="_blank">  lplplplplpl</a>
         <div class="card">
         {% if product.variants.first.image1 %}
           <img src="{{ product.variants.first.image1.url }}" alt="{{ product.name }}">
@@ -61,7 +61,7 @@
         {% endif %}
         
       </div>
-    </a>
+   
       {% endfor %}
     </div>
     </div>

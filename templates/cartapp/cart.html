@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{%block navbar%}
+{% if request.user.is_authenticated %}
+    {% include 'partials/loginnav.html'%}
+{% else %}
+    {% include 'partials/nav.html'%}
+{% endif %}
+{%endblock navbar%}
+{% block content %}
+<div class="container mt-4 pt-3" style="background-color: rgba(255, 255, 255, 0.792);">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">🛒 Cart</h2>
+    {% if items %}
+        <div class="row" >
+            <div class="col-md-8">
+                {% for item in items %}
+                  <div class="card mb-4 shadow-sm border-0 w-70">
+                    <div class="row g-0 align-items-center">
+                      <div class="col-md-4">
+                        <img src="{{ item.product_variant_id.image1.url }}" class="img-fluid rounded-start" alt="{{ item.product_variant_id.product_id.name }}">
+                      </div>
+              
+                      <div class="col-md-8">
+                        <div class="card-body py-3 px-4">
+                          <h5 class="card-title mb-2">{{ item.product_variant_id.product_id.name }}</h5>
+                          <p class="card-text mb-2">
+                            {% if item.selected_attribute_value %}
+                              <small class="text-muted">Size: {{ item.selected_attribute_value }}</small><br>
+                            {% endif %}
+                            <small class="text-muted">Color: {{ item.product_variant_id.color }}</small>
+                          </p>
+              
+                          <p class="card-text mb-3">
+                            <span class="fw-bold">₹{{ item.product_variant_id.sale_price }}</span>
+                            <small class="text-muted ms-2"><strike>₹{{ item.product_variant_id.original_price }}</strike></small>
+                            <small class="text-success ms-2">{% if item.product_variant_id.discount_per %}{{ item.product_variant_id.discount_per }}% off {%endif%}</small>
+                          </p>
+              
+                          <div class="d-flex align-items-center mb-3">
+                            <form method="post" action="{% url 'update_cart_item' item.id %}" class="d-flex align-items-center me-3">
+                              {% csrf_token %}
+                              <div class="input-group" style="width: 120px;">
+                                <button class="btn btn-outline-secondary btn-sm" type="submit" onclick="decrementQuantity(this)">−</button>
+                                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="{{ item.product_variant_id.stock }}" class="form-control text-center form-control-sm">
+                                <button class="btn btn-outline-secondary btn-sm" type="submit" onclick="incrementQuantity(this)">+</button>
+                              </div>
+                              
+                            </form>
+                           
+                            <form method="post" action="{% url 'remove_from_cart' item.id %}">
+                              {% csrf_token %}
+                              <button type="submit" class="btn btn-outline-danger btn-sm">🗑️ Remove</button>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+              
+            <div class="col-md-4">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">PRICE DETAILS</h5>
+                    <hr>
+              
+                    <div class="d-flex justify-content-between my-2">
+                      <span>Price ({{ cart.total_items }} items)</span>
+                      <span>₹{{ cart.total_original_price|intcomma }}</span>
+                    </div>
+              
+                    <div class="d-flex justify-content-between my-2">
+                      <span>Discount</span>
+                      <span class="text-success">– ₹{{ cart.total_discount|intcomma }}</span>
+                    </div>
+              
+                    <div class="d-flex justify-content-between my-2">
+                      <span>Delivery Charges</span>
+                      <span>
+                        {% if cart.delivery_charge == 0 %}
+                          <strike>₹100</strike> <span class="text-success">Free</span>
+                        {% else %}
+                          ₹{{ cart.delivery_charge }}
+                        {% endif %}
+                      </span>
+                    </div>
+              
+                    <div class="d-flex justify-content-between my-2">
+                      <span>Secured Packaging Fee</span>
+                      <span>₹{{ cart.packaging_fee }}</span>
+                    </div>
+              
+                    <hr>
+              
+                    <div class="d-flex justify-content-between fw-bold my-2">
+                      <span>Total Amount</span>
+                      <span>₹{{ cart.total_payable|intcomma }}</span>
+                    </div>
+              
+                    <div class="mt-2 text-success fw-semibold">
+                      You will save ₹{{ cart.total_discount|intcomma }} on this order
+                    </div>
+              
+                    <a href="{% url 'checkout' %}" class="btn btn-warning btn-lg w-100 mt-3">Proceed to Checkout</a>
+                  </div>
+                </div>
+              </div>
+              
+              
+        </div>
+    {% else %}
+    
+    <div class="d-flex align-items-center justify-content-center">
+    <div class="d-flex flex-column align-items-center justify-content-center col-md-4">
+        <img src="https://rukminim2.flixcart.com/www/800/800/promos/16/05/2019/d438a32e-765a-4d8b-b4a6-520b560971e8.png?q=90" class="_23xWM8 rounded" style="max-width: 100%; height: auto;">
+        <div class="s2gOFd mt-3 text-center" style="font-size: 1.2em; font-weight: bold;">Your cart is empty!</div>
+        <div class="orqM3- mt-2 mb-2" style="color: #666;">Explore our wide selection and find something you like</div>
+        <a href="{% url 'dashboard' %}" class="btn btn-outline-info rounded-pill">🛒 Continue shopping</a>
+      </div>
+    </div>
+    {% endif %}
+
+</div>
+<script>
+    function incrementQuantity(button) {
+        const input = button.parentElement.querySelector('input');
+        const max = parseInt(input.getAttribute('max'));
+        let value = parseInt(input.value);
+        if (value < max) {
+            input.value = value + 1;
+        }
+    }
+    
+    function decrementQuantity(button) {
+        const input = button.parentElement.querySelector('input');
+        if (parseInt(input.value) > 1) {
+            input.value = parseInt(input.value) - 1;
+        }
+    }
+    </script>
+{% endblock %}

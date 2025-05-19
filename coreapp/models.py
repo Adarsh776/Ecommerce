@@ -48,22 +48,25 @@ class ProductVariantModel(models.Model):
     slug=models.CharField(max_length=255,null=True,blank=True)
 
     def __str__(self):
-        return self.attribute
+        return self.slug
     
     def save(self,*args,**kwargs):
 
-        self.slug=str(self.product_id.name).replace(' ','-')
+        self.slug= (self.product_id.name+'-'+(self.color if self.color else '')).replace(' ','-')
+        self.sale_price=self.original_price - (self.original_price * self.discount_per / 100)
         super().save(*args,**kwargs)
 
 
 class ProductAttributeModel(models.Model):
     attribute_id=models.AutoField(primary_key=True)
-    product_id=models.ForeignKey(ProductModel,on_delete=models.CASCADE)
+    product_id=models.ForeignKey(ProductModel,on_delete=models.CASCADE,null=True,blank=True)
+    variant_id=models.ForeignKey(ProductVariantModel,on_delete=models.CASCADE,null=True,blank=True)
     attribute=models.CharField(max_length=100)
     value=models.CharField(max_length=255)
+    
 
     def __str__(self):
-        return self.product_id.name
+        return self.variant_id.slug
     
 
 
@@ -74,6 +77,7 @@ class PaymentsModel(models.Model):
     amount=models.DecimalField(max_digits=10,decimal_places=2)
     status=models.CharField(max_length=100)
     created_at=models.DateField(auto_now=True)
+    payment_mode = models.CharField(max_length=50, choices=[('Razorpay', 'Razorpay'), ('COD', 'Cash on Delivery'), ('UPI', 'UPI')], default='Razorpay')
 
 
 class ReviewsModel(models.Model):
@@ -88,12 +92,6 @@ class DigitalProductModel(models.Model):
     digital_id=models.AutoField(primary_key=True)
     product_id=models.ForeignKey(ProductModel,on_delete=models.CASCADE)
     file_url=models.CharField(max_length=2000)
-
-class CartModel(models.Model):
-    cart_id=models.AutoField(primary_key=True)
-    user_id=models.ForeignKey(Custom_UserModel,on_delete=models.CASCADE)
-    quantity=models.IntegerField()
-
 
 
 

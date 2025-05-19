@@ -9,7 +9,7 @@ class OrdersModel(models.Model):
     status=models.CharField(max_length=100)
     created_at=models.DateField(auto_now=True)
     ordered=models.BooleanField(default=False)
-    order_item=models.ForeignKey("OrderItemModel",on_delete=models.CASCADE,default=False)
+    order_items = models.ManyToManyField("OrderItemModel")
 
 
 class OrderItemModel(models.Model):

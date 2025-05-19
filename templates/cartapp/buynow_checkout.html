@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% load humanize %}
+
+{%block navbar%}
+{% if request.user.is_authenticated %}
+    {% include 'partials/loginnav.html'%}
+{% else %}
+    {% include 'partials/nav.html'%}
+{% endif %}
+{%endblock navbar%}
+{% block content %}
+<div class="container mt-4">
+    <h2>Checkout</h2>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Shipping Information</h5>
+                    <form method="post" action="{% url 'process_payment' %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="full_name" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="full_name" name="full_name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ request.user.email }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Shipping Address</label>
+                            <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+                        </div>
+                        
+                        <h5 class="card-title mt-4">Payment Method</h5>
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="payment_method" id="razorpay" value="Razorpay" checked>
+                                    <label class="form-check-label" for="razorpay">Credit Card / UPI (via Razorpay)</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="payment_method" id="cod" value="COD">
+                                    <label class="form-check-label" for="cod">Cash on Delivery</label>
+                                </div>
+                            </div>
+                            <input type="hidden" name="buy_now_variant_id" value="{{ variant.variant_id }}">
+                            <input type="hidden" name="quantity" value="{{ quantity }}">
+                        <button type="submit" class="btn btn-success btn-lg">Place Order</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">PRICE DETAILS</h5>
+                    <hr>
+                  
+                    <div class="d-flex justify-content-between my-2">
+                      <span>Price ({{ total_items }} item)</span>
+                      <span>₹{{ total_original_price|intcomma }}</span>
+                    </div>
+                  
+                    <div class="d-flex justify-content-between my-2">
+                      <span>Discount</span>
+                      <span class="text-success">– ₹{{ total_discount|intcomma }}</span>
+                    </div>
+                  
+                    <div class="d-flex justify-content-between my-2">
+                      <span>Delivery Charges</span>
+                      <span>
+                        {% if delivery_charge == 0 %}
+                          <strike>₹100</strike> <span class="text-success">Free</span>
+                        {% else %}
+                          ₹{{ delivery_charge }}
+                        {% endif %}
+                      </span>
+                    </div>
+                  
+                    <div class="d-flex justify-content-between my-2">
+                      <span>Secured Packaging Fee</span>
+                      <span>₹{{ packaging_fee }}</span>
+                    </div>
+                  
+                    <hr>
+                  
+                    <div class="d-flex justify-content-between fw-bold my-2">
+                      <span>Total Amount</span>
+                      <span>₹{{ total_payable|intcomma }}</span>
+                    </div>
+                  
+                    <div class="mt-2 text-success fw-semibold">
+                      You will save ₹{{ total_discount|intcomma }} on this order
+                    </div>
+                  </div>                  
+        </div>
+    </div>
+</div>
+{% endblock %}

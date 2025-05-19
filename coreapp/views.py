@@ -66,6 +66,18 @@ class ProductDetailView(View):
 
         category = product.product_id.category_id
         product_id = product.product_id.product_id
+        
+        
+        # Get all variants of this base product
+        all_variants = ProductVariantModel.objects.filter(product_id=product.product_id)
+
+        # Build color → [variant] mapping
+        color_variant_map = {}
+        for variant in all_variants:
+            color_attr=variant.color
+            if color_attr:
+                color_variant_map[color_attr]=variant
+
 
         similar_products = ProductVariantModel.objects.filter(
             product_id__category_id=category
@@ -93,13 +105,10 @@ class ProductDetailView(View):
         recent_products = ProductVariantModel.objects.filter(slug__in=recently_viewed).exclude(slug=slug)
         recent_products = sorted(recent_products, key=lambda x: recently_viewed.index(x.slug))
 
-        attributes=ProductAttributeModel.objects.filter(product_id=product_id)
-        attributedict={}
-        for p in attributes:
-            if p.attribute not in attributedict:
-                attributedict[p.attribute]=[p.value]
-            else:
-                attributedict[p.attribute]=attributedict[p.attribute]+[p.value]
+        current_attributes = ProductAttributeModel.objects.filter(product_id=product_id, variant_id=product)
+        attributedict = {}
+        for attr in current_attributes:
+            attributedict.setdefault(attr.attribute, []).append(attr.value)
         
 
         context = {
@@ -107,7 +116,8 @@ class ProductDetailView(View):
             'similar_products': similar_products,
             'best_deals': best_deals,
             'recently_viewed': recent_products,
-            "attributedict":attributedict
+            "attributedict":attributedict,
+            "color_variant_map": color_variant_map,
         }
         return render(request, 'coreap/product_detail.html', context)
 

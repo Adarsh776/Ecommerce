@@ -27,8 +27,9 @@ urlpatterns = [
     path('',coreview.Openpage.as_view(),name='openpage'),
     path('authentication/',include('authentication.urls')),
     path('coreapp/',include('coreapp.urls')),
-    path('orderapp/',include('orderapp.urls')),
+    # path('orderapp/',include('orderapp.urls')),
     path('accounts/', include('allauth.urls')),
+    path('cartapp/',include('cartapp.urls')),
 ]
 
 if settings.DEBUG:
