@@ -128,38 +128,39 @@ class ProcessPaymentView(View):
                 return redirect('razorpay_checkout')
 
             # COD flow
-            order_item = OrderItemModel.objects.create(
-                product_id=variant.product_id,
-                quantity=quantity,
-                price=variant.sale_price,
-                ordered=True
-            )
+            if payment_method =="COD":
+                order_item = OrderItemModel.objects.create(
+                    product_id=variant.product_id,
+                    quantity=quantity,
+                    price=variant.sale_price,
+                    ordered=True
+                )
 
-            order = OrdersModel.objects.create(
-                user_id=user,
-                total=total_amount,
-                status='Placed (COD)',
-                ordered=True
-            )
-            order.order_items.add(order_item)
+                order = OrdersModel.objects.create(
+                    user_id=user,
+                    total=total_amount,
+                    status='Placed (COD)',
+                    ordered=True
+                )
+                order.order_items.add(order_item)
 
-            PaymentsModel.objects.create(
-                order_id=order,
-                user_id=user,
-                amount=total_amount,
-                status="Pending",
-                payment_mode="COD"
-            )
+                PaymentsModel.objects.create(
+                    order_id=order,
+                    user_id=user,
+                    amount=total_amount,
+                    status="Pending",
+                    payment_mode="COD"
+                )
 
-            ShippingModel.objects.create(
-                order_id=order,
-                address=address,
-                tracking_id="TRK" + str(timezone.now().timestamp()).replace('.', '')[:15],
-                status="Pending"
-            )
+                ShippingModel.objects.create(
+                    order_id=order,
+                    address=address,
+                    tracking_id="TRK" + str(timezone.now().timestamp()).replace('.', '')[:15],
+                    status="Pending"
+                )
 
-            messages.success(request, "Order placed successfully with Cash on Delivery!")
-            return redirect('dashboard')
+                messages.success(request, "Order placed successfully with Cash on Delivery!")
+                return redirect('dashboard')
 
         # Case 2: Cart flow (original logic here)
         cart = CartModel.objects.get(user=user)

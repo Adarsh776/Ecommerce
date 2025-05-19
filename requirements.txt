@@ -17,6 +17,7 @@ Pillow==10.2.0  # Required for ImageField
 django-imagekit==4.1.0  # For image processing
 
 # Payment Processing
+setuptools
 razorpay
 django-payments==2.0.0  # For payment processing
 
