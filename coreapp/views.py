@@ -3,6 +3,7 @@ from .models import ProductModel
 from .models import ProductVariantModel,CategoriesModel,ProductAttributeModel
 from django.views import View
 from collections import defaultdict
+from django.views.generic import ListView
 
 # Create your views here.
 
@@ -134,3 +135,12 @@ class SubCategoryProducts(View):
             'products': products,
         }
         return render(request, 'coreap/subcategory_products.html', context)
+
+class SearchResultsView(ListView):
+    model = ProductModel
+    template_name = 'coreap/search_results.html'
+    context_object_name = 'results'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        return ProductModel.objects.filter(name__icontains=query)

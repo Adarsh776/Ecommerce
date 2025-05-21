@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{%block navbar%}
+{% if request.user.is_authenticated %}
+    {% include 'partials/loginnav.html'%}
+{% else %}
+    {% include 'partials/nav.html'%}
+{% endif %}
+{%endblock navbar%}
+
+{% block content %}
+<div class="container mt-4">
+    {% if results %}
+        <div class="product-grid">
+            {% for product in results %}
+                <div class="products-card">
+                    <a href="{% url 'productdetail' slug=product.variants.first.slug %}">
+                        <img src="{{ product.variants.first.image1.url }}" alt="{{ product.name }}">
+                        <h3>{{ product.name }}</h3>
+                        <p>₹{{ product.variants.first.sale_price|intcomma }}</p>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+    <div class="d-flex align-items-center justify-content-center">
+        <div class="d-flex flex-column align-items-center justify-content-center col-md-4">
+            <img src="https://static-assets-web.flixcart.com/fk-p-linchpin-web/fk-cp-zion/img/error-no-search-results_2353c5.png">
+            <div class="s2gOFd mt-3 text-center" style="font-size: 1.2em; font-weight: bold;">Sorry, no results found!</div>
+            <div class="orqM3- mt-2 mb-2" style="color: #666;">Please check the spelling or try searching for something else</div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

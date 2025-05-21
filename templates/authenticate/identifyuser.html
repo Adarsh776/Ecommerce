@@ -9,9 +9,10 @@
     <h2>{{ title }}</h2>
     {% csrf_token %}
     {{form | crispy}}
-
-    <button type="submit">Send Otp</button>
-    <a href="{% url 'login' %}" class="btn btn-dark">Back</a>
+    <div class="buttons">
+        <button type="submit" class="btn btn-primary">Send Otp</button>
+        <a href="{% url 'login' %}" class="btn btn-dark pt-4">Back</a>
+    </div>
 </form>
 
 {% endblock content %}
