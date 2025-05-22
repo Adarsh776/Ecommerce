@@ -168,8 +168,9 @@
 
 
 <!-- SIMILAR PRODUCTS -->
- <div>
-<h2 class="similar-section-title">Similar Products</h2>
+{% if similar_products %}
+ <div class="d-flex flex-column bg-white w-100 rounded my-2">
+<h2 class="similar-section-title  border-bottom p-3">Similar Products</h2>
 <div class="product-details-section">
   {% for item in similar_products %}
     <a href="{% url 'productdetail' slug=item.slug %}" class="product-details-card" target="_blank">
@@ -179,10 +180,12 @@
   {% endfor %}
 </div>
 </div>
+{% endif %}
 
 <!-- BEST DEALS -->
- <div>
-<h2 class="similar-section-title">Best Deals</h2>
+ {% if best_deals %}
+ <div class="d-flex flex-column bg-white w-100 rounded my-2">
+<h2 class="similar-section-title border-bottom p-3">Best Deals</h2>
 <div class="product-details-section">
   {% for item in best_deals %}
     <a href="{% url 'productdetail' slug=item.slug %}" class="product-details-card" target="_blank">
@@ -192,9 +195,11 @@
   {% endfor %}
 </div>
 </div>
+{% endif %}
 
-<div>
-<h2 class="similar-section-title">Recently Viewed</h2>
+{% if recently_viewed %}
+<div class="d-flex flex-column bg-white w-100 rounded my-2">
+<h2 class="similar-section-title border-bottom p-3">Recently Viewed</h2>
 <div class="product-details-section">
   {% for item in recently_viewed %}
     <a href="{% url 'productdetail' slug=item.slug %}" class="product-details-card" target="_blank">
@@ -204,4 +209,6 @@
   {% endfor %}
 </div>
 </div>
+{% endif %}
+
 {% endblock content %}
