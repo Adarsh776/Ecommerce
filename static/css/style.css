@@ -941,3 +941,34 @@ a.buy-now:hover {
         scrollbar-width: none;
     }
 }
+
+.star-rating-group {
+  direction: rtl;
+  display: inline-flex;
+  gap: 5px;
+}
+
+.star-rating-group input[type="radio"] {
+  display: none;
+}
+
+.star-rating-group label {
+  font-size: 2rem;
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.star-rating-group input[type="radio"]:checked ~ label {
+  color: #ccc;
+}
+
+.star-rating-group input[type="radio"]:checked + label,
+.star-rating-group input[type="radio"]:checked + label ~ label {
+  color: gold;
+}
+
+.star-rating-group label:hover,
+.star-rating-group label:hover ~ label {
+  color: gold;
+}

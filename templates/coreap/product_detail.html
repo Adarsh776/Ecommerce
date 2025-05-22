@@ -36,6 +36,12 @@
       <div class="product-title">{{ product.product_id.name }}</div>
       <div class="product-description">{{ product.product_id.description }}</div>
 
+      <a href="#rating-section">
+      <span class="bg-success">
+        <div class="d-inline-block bg-success text-white rounded px-1">{{ avg_rating|floatformat:1 }}★</div>
+      </span>
+    </a>
+
       <div class="price-block">
         <b>₹{{ product.sale_price }}</b>
         <strike>₹{{ product.original_price }}</strike>
@@ -83,6 +89,77 @@
           <h4>{{a}} : <small>{% for i in v %} {{i}}  {%endfor%}</small></h4>
         {%endfor%}
       </div>
+
+      <div class="container my-1 p-4 border rounded shadow-sm" id="rating-section">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h4 class="fw-bold">Ratings & Reviews</h4>
+          <a href="{% url 'productreview' product.product_id.product_id %}" class="btn btn-outline-primary btn-sm">Write a review</a>
+        </div>
+      
+        <!-- Top Ratings Summary -->
+        <div class="row g-4">
+          <div class="col-md-3 text-center">
+            <h1 class="display-4 fw-bold text-success">{{ avg_rating|floatformat:1 }}★</h1>
+            <p class="mb-1 text-muted">{{ reviews.count }} Ratings</p>
+            <p class="mb-0 text-muted">{{ total_reviews }} Reviews</p>
+          </div>
+      
+          <!-- Rating Bars -->
+          <div class="col-md-6">
+            {% for rating,count in rating_counts.items %}
+              <div class="d-flex align-items-center mb-2">
+                <span class="me-2" style="width: 35px;">{{ rating }} 
+                  {%if rating == '1' %}
+                  <span style="color:rgb(201, 0, 0)">★</span>
+                  {%elif rating == '2' %}
+                  <span style="color:rgb(201, 74, 0)">★</span>
+                  {%elif rating == '3' %}
+                  <span style="color:rgb(201, 117, 0)">★</span>
+                  {%elif rating == '4' %}
+                  <span style="color:rgb(127, 201, 0)">★</span>
+                  {%elif rating == '5' %}
+                  <span style="color:rgb(0, 141, 14)">★</span>
+                  {% endif %}
+                </span>
+                <div class="progress flex-grow-1" style="height: 10px;">
+                  <div class="progress-bar" role="progressbar" style="width: {{ count }}%;" aria-valuenow="{{ count }}" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <span class="ms-2 text-muted">{{ item.count }}</span>
+              </div>
+            {% endfor %}
+          </div>
+      
+          <!-- Review Images -->
+          <div class="col-md-3">
+            <div class="d-flex flex-wrap gap-2">
+              {% for review in reviews %}
+                {% if review.review_image %}
+                  <img src="{{ review.review_image.url }}" class="img-thumbnail" style="width: 80px; height: 80px; object-fit: cover;" alt="Review Image">
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      
+        <hr class="my-4">
+      
+        <!-- Review List -->
+        <div class="review-list">
+          {% for review in reviews %}
+            <div class="card mb-3">
+              <div class="card-body">
+                <h6 class="card-title text-success mb-1">{{ review.rating }}★</h6>
+                <p class="card-text mb-1">{{ review.review }}</p>
+                <p class="card-subtitle small text-muted">by {{ review.user_id.first_name }} {{ review.user_id.last_name }} on {{ review.created_at }}</p>
+                {% if review.review_image %}
+                  <img src="{{ review.review_image.url }}" class="mt-3 rounded" style="width: 120px; height: 120px; object-fit: cover;" alt="Review Image">
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
     </div>
   </div>
   </div>

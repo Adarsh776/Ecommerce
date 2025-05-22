@@ -1,9 +1,15 @@
-from django.shortcuts import render
-from .models import ProductModel
-from .models import ProductVariantModel,CategoriesModel,ProductAttributeModel
+from django.shortcuts import render,redirect
+from django.db.models import Avg,Count
+from authentication.models import Custom_UserModel
+from orderapp.models import OrdersModel
+from .models import ProductVariantModel,CategoriesModel,ProductAttributeModel,ReviewsModel,ProductModel
+from .forms import ReviewsForm
 from django.views import View
 from collections import defaultdict
 from django.views.generic import ListView
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+
 
 # Create your views here.
 
@@ -67,6 +73,10 @@ class ProductDetailView(View):
 
         category = product.product_id.category_id
         product_id = product.product_id.product_id
+        reviews=ReviewsModel.objects.filter(product_id=product_id)
+        total_reviews = reviews.count()
+        average_rating = reviews.aggregate(avg=Avg('rating'))['avg'] or 0
+        
         
         
         # Get all variants of this base product
@@ -110,6 +120,13 @@ class ProductDetailView(View):
         attributedict = {}
         for attr in current_attributes:
             attributedict.setdefault(attr.attribute, []).append(attr.value)
+
+        
+        rating_counts = reviews.values('rating').annotate(count=Count('rating'))
+        rating_dict = {str(i): 0 for i in range(5,0,-1)}
+        for item in rating_counts:
+            rating_dict[str(item['rating'])] = item['count']
+
         
 
         context = {
@@ -119,6 +136,10 @@ class ProductDetailView(View):
             'recently_viewed': recent_products,
             "attributedict":attributedict,
             "color_variant_map": color_variant_map,
+            'reviews': reviews,
+            'total_reviews': total_reviews,
+            'avg_rating': average_rating,
+            'rating_counts': rating_dict
         }
         return render(request, 'coreap/product_detail.html', context)
 
@@ -135,6 +156,54 @@ class SubCategoryProducts(View):
             'products': products,
         }
         return render(request, 'coreap/subcategory_products.html', context)
+
+@method_decorator(login_required,name='dispatch')
+class ProductReview(View):
+    def get(self, request, *args, **kwargs):
+        user_id = Custom_UserModel.objects.get(id=request.user.id)
+        product_id = kwargs['id']
+
+        product = ProductModel.objects.get(product_id=product_id)
+
+        has_purchased = OrdersModel.objects.filter(
+            user_id=user_id,
+            order_items__product_id=product
+        ).exists()
+
+        reviewed = ReviewsModel.objects.filter(
+            user_id=user_id,
+            product_id=product
+            ).first()
+        
+        if has_purchased and reviewed:
+            form=ReviewsForm(instance=reviewed)
+        else:
+            form=ReviewsForm()
+
+        context = {
+            'form':form,
+            'has_purchased':has_purchased
+        }
+        return render(request,'coreap/product_review.html',context)
+    
+    def post(self, request, *args, **kwargs):
+        user_id = Custom_UserModel.objects.get(id=request.user.id)
+        product_id = kwargs['id']
+        obj=ReviewsModel.objects.filter(user_id=user_id,product_id=product_id).first()
+        product = ProductModel.objects.get(product_id=product_id)
+        if obj:
+            form = ReviewsForm(request.POST,request.FILES,instance=obj)
+        else:
+            form = ReviewsForm(request.POST,request.FILES)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.user_id = user_id
+            review.product_id = product
+            form.save()
+            return redirect('productdetail',slug=product.variants.first().slug)
+        return redirect('productdetail',slug=product.variants.first().slug)
+
+
 
 class SearchResultsView(ListView):
     model = ProductModel

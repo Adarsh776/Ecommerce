@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+{% block navbar %}
+  {% if request.user.is_authenticated %}
+    {% include 'partials/loginnav.html' %}
+  {% else %}
+    {% include 'partials/nav.html' %}
+  {% endif %}
+{% endblock navbar %}
+
+{% if has_purchased %}
+<div class="container my-5">
+  <div class="card p-4 shadow">
+    <h3 class="mb-4">Write a Review</h3>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      
+      <!-- STAR RATING CUSTOM INPUT -->
+      <div class="mb-3">
+        <label class="form-label d-block">Your Rating</label>
+        <div class="star-rating-group">
+          {% for i in "54321" %}
+            <input type="radio" name="rating" value="{{ i }}" id="star{{ i }}" />
+            <label for="star{{ i }}">★</label>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Render review and image fields -->
+      {{ form.review|as_crispy_field }}
+      {{ form.review_image|as_crispy_field }}
+      <div class="text-center">
+      <button type="submit" class="btn btn-warning mt-2 w-50 py-3">Submit</button>
+    </div>
+    </form>
+  </div>
+</div>
+
+
+{% else %}
+<div class="r3N-+G text-center p-5">
+  <img src="https://static-assets-web.flixcart.com/fk-p-linchpin-web/fk-cp-zion/img/error-404_4134d8.png" alt="Not allowed">
+  <h3 class="mt-4">Haven't purchased this product?</h3>
+  <p class="text-muted">Sorry! You are not allowed to review this product since you haven't bought it on shopEZY.</p>
+</div>
+{% endif %}
+
+{% endblock %}

@@ -84,9 +84,13 @@ class ReviewsModel(models.Model):
     review_id=models.AutoField(primary_key=True)
     user_id=models.ForeignKey(Custom_UserModel,on_delete=models.CASCADE)
     product_id=models.ForeignKey(ProductModel,on_delete=models.CASCADE)
-    rating=models.IntegerField()
-    review=models.CharField(max_length=200)
-    created_at=models.DateField(auto_now=True)
+    rating=models.IntegerField(default=5,choices=[(i, str(i)) for i in range(1, 6)])
+    review=models.TextField(max_length=1000)
+    review_image=models.ImageField(upload_to='review_image/',null=True,blank=True)
+    created_at=models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user_id.username} - {self.product_id.name}"
 
 class DigitalProductModel(models.Model):
     digital_id=models.AutoField(primary_key=True)
