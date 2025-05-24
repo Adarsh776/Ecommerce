@@ -6,6 +6,7 @@ from .models import ProductVariantModel,CategoriesModel,ProductAttributeModel,Re
 from .forms import ReviewsForm
 from django.views import View
 from collections import defaultdict
+from django.contrib import messages
 from django.views.generic import ListView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -160,7 +161,10 @@ class SubCategoryProducts(View):
 @method_decorator(login_required,name='dispatch')
 class ProductReview(View):
     def get(self, request, *args, **kwargs):
-        user_id = Custom_UserModel.objects.get(id=request.user.id)
+        user_id = Custom_UserModel.objects.filter(id=request.user.id).first()
+        if not user_id:
+            messages.error(request,"You Are Logged In but not as a Valid User. Kindly Register Properly.")
+            return redirect('openpage')
         product_id = kwargs['id']
 
         product = ProductModel.objects.get(product_id=product_id)

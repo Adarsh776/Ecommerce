@@ -24,7 +24,11 @@ PACKAGING_FEE = Decimal("218.00")
 class CartView(View):
     @method_decorator(login_required)
     def get(self, request):
-        custom_user = Custom_UserModel.objects.get(id=request.user.id)
+        custom_user = Custom_UserModel.objects.filter(id=request.user.id).first()
+        if not custom_user:
+            messages.error(request,"You Are Logged In but not as a Valid User. Kindly Register Properly.")
+            return redirect('openpage')
+
         cart,created= CartModel.objects.get_or_create(user=custom_user)
 
         context = {
@@ -37,7 +41,11 @@ class CartView(View):
 class AddToCartView(View):
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
-        custom_user = Custom_UserModel.objects.get(id=request.user.id)
+        custom_user = Custom_UserModel.objects.filter(id=request.user.id).first()
+        if not custom_user:
+            messages.error(request,"You Are Logged In but not as a Valid User. Kindly Register Properly.")
+            return redirect('openpage')
+
         cart,created= CartModel.objects.get_or_create(user=custom_user)
         selected_size = request.POST.get("selected_size")
         selected_storage = request.POST.get("selected_storage")
@@ -85,7 +93,11 @@ class RemoveFromCartView(View):
 @method_decorator(login_required, name='dispatch')
 class CheckoutView(View):
     def get(self, request):
-        custom_user = Custom_UserModel.objects.get(id=request.user.id)
+        custom_user = Custom_UserModel.objects.filter(id=request.user.id).first()
+        if not custom_user:
+            messages.error(request,"You Are Logged In but not as a Valid User. Kindly Register Properly.")
+            return redirect('openpage')
+        
         cart = get_object_or_404(CartModel, user=custom_user)
         if not cart.items.exists():
             messages.error(request, 'Your cart is empty!')
@@ -100,7 +112,10 @@ class CheckoutView(View):
 class ProcessPaymentView(View):
     @method_decorator(login_required)
     def post(self, request):
-        user = Custom_UserModel.objects.get(id=request.user.id)
+        custom_user = Custom_UserModel.objects.filter(id=request.user.id).first()
+        if not custom_user:
+            messages.error(request,"You Are Logged In but not as a Valid User. Kindly Register Properly.")
+            return redirect('openpage')
         buy_now_variant_id = request.POST.get("buy_now_variant_id")
         buy_now_quantity = request.POST.get("quantity", 1)
 
@@ -213,7 +228,7 @@ class BuyNowView(View):
 class RazorpayCheckoutView(View):
     @method_decorator(login_required)
     def get(self, request):
-        cart = get_object_or_404(CartModel, user=request.user)
+        # cart = get_object_or_404(CartModel, user=request.user)
         shipping = request.session.get("shipping")
 
         client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))

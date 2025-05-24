@@ -11,21 +11,27 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import environ
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = environ.Env(
+    DEBUG=(bool, False)
+)
+environ.Env.read_env(os.path.join(BASE_DIR,'.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-0tp6@nyanpo22k=3_y!@z8ub+agkavv4e2ix*$lnn-^n^oqh%@'
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS",default=[])
 
 
 # Application definition
@@ -87,10 +93,7 @@ WSGI_APPLICATION = 'ecommmerce.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': env.db()
 }
 
 
@@ -141,12 +144,12 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 #email
-EMAIL_HOST='smtp.gmail.com'
-EMAIL_HOST_USER="adarshadi7760@gmail.com"
-EMAIL_USE_TLS=True
-DEFAULT_FORM_EMAIL="adarshadi7760@gmail.com"
-EMAIL_PORT=587
-EMAIL_HOST_PASSWORD='akhfvplhvljmwapp'
+EMAIL_HOST=env("EMAIL_HOST")
+EMAIL_HOST_USER=env("EMAIL_HOST_USER")
+EMAIL_USE_TLS=env("EMAIL_USE_TLS")
+DEFAULT_FORM_EMAIL=env("DEFAULT_FORM_EMAIL")
+EMAIL_PORT=env("EMAIL_PORT")
+EMAIL_HOST_PASSWORD=env("EMAIL_HOST_PASSWORD")
 
 LOGIN_URL='/authentication/login/'
 
@@ -169,12 +172,9 @@ SOCIALACCOUNT_LOGIN_ON_GET=True
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
-        # For each OAuth based provider, either add a ``SocialApp``
-        # (``socialaccount`` app) containing the required client
-        # credentials, or list them here:
         'APP': {
-            'client_id':'24411341228-3i4qb2j6b4lgj07uul1s9hu54j161o0c.apps.googleusercontent.com',
-            'secret': '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',
+            'client_id':env("GOOGLE_CLIENT_ID"),
+            'secret': env("GOOGLE_SECRET"),
             'key': ''
         }
     }
@@ -183,5 +183,5 @@ SOCIALACCOUNT_PROVIDERS = {
 MEDIA_URL='/media/'
 MEDIA_ROOT=BASE_DIR/'media'
 
-RAZORPAY_KEY_ID='rzp_test_U2G8Ippalow6BS'
-RAZORPAY_KEY_SECRET='oNJJtjQuFPN9mB2undfwTOgn'
+RAZORPAY_KEY_ID=env("RAZORPAY_KEY_ID")
+RAZORPAY_KEY_SECRET=env("RAZORPAY_KEY_SECRET")
